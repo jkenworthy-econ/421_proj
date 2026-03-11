@@ -91,4 +91,4 @@ baseline analysis.
 
 Authors
 -------
-Joshua Kenworthy and Econ 421 project group
+Agnibha Bhattacharya, Jackson Wurzer, and Joshua Kenworthy
