@@ -1,0 +1,993 @@
+\documentclass[12pt]{article}
+
+% ---------- packages ----------
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{microtype}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+
+% ---------- hyperref setup ----------
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  urlcolor=black
+}
+
+% ---------- spacing ----------
+\doublespacing
+
+% ---------- title block ----------
+\title{\textbf{Wage Transparency and Within-Rank Salary Compression:\\
+Evidence from UC Faculty Compensation, 2012--2024}}
+
+\author{
+  Joshua Kenworthy \and
+  Agnibha Bhattacharya \and
+  Jackson Wurzer
+}
+
+\date{March 2026}
+
+% ============================================================
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+% ---------- Abstract ----------
+\begin{abstract}
+\noindent
+We examine whether the 2022 increase in the salience of wage information
+in the University of California (UC) system corresponds with measurable
+changes in within-rank faculty salary dispersion. Using a 13-year
+repeated cross-section of approximately 229,000 salary records from
+2012 to 2024---covering five faculty ranks across ten UC campuses---we
+construct annual coefficients of variation (CV) for each rank and
+estimate log-linear OLS regressions with rank fixed effects, campus
+fixed effects, and a linear time trend. We find that mean nominal
+salaries grew by roughly 52\,\% over the sample period before declining
+6.4\,\% in 2024. The baseline regression yields a \textit{post2022}
+coefficient of $-0.063$ ($p < 0.001$), indicating wages were
+approximately 6.3\,\% below the secular trend after 2022 conditional on
+rank and campus. The CV declined modestly for Full, Associate, Research,
+and Clinical professors after 2022, with Associate professors showing
+the largest drop of approximately 4.7 percentage points. Assistant
+professors are an exception: their CV rose by roughly 2.4 percentage
+points, consistent with external labor-market pressures. Levene's tests
+confirm that absolute variance increased significantly across all ranks
+post-2022, but this is reconcilable with CV compression because mean
+salaries rose faster than the absolute spread. A
+difference-in-differences (DiD) interaction model finds no significant
+narrowing of the wage gap between Full and Assistant professors, though
+Associate and Clinical professors fared relatively better in the
+post-period. We interpret these patterns as consistent with
+transparency-driven internal equity adjustments concentrated within,
+rather than across, faculty ranks.
+\end{abstract}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ============================================================
+\section{Introduction}
+\label{sec:intro}
+
+The University of California (UC) system is one of the largest public
+employers in the United States, employing over 265,000 faculty and staff
+across ten campuses \citep{UC2025}. Compensation within the UC system has
+long been subject to a high degree of transparency. Following a 2008
+court decision, the \textit{Sacramento Bee} created a searchable online
+database that allowed the public to view the salary of any California
+state employee, including UC faculty \citep[p.~2982]{card2012}. Since
+that time, multiple websites have made UC salary data easily accessible,
+enabling employees to compare their compensation with that of their peers
+on an ongoing basis.
+
+This institutional setting provides a useful environment to study the
+relationship between wage transparency and wage compression. Economic
+theory predicts that when workers can observe peer compensation,
+within-group pay disparities become salient and can generate
+dissatisfaction, reduce effort, or increase turnover among lower-paid
+employees \citep[p.~2981]{card2012}. Employers may therefore face
+incentives to narrow wage gaps within comparable job categories in order
+to retain workers and maintain productivity \citep{cullen2022}.
+
+Our paper focuses on the period surrounding 2022, which represents a
+meaningful shift in the compensation and transparency environment for UC
+faculty. Two developments converged: first, California's Pay
+Transparency Act took effect in January 2023, expanding wage disclosure
+requirements across the state; second, in late 2022 the UC system
+experienced its largest academic labor action in history, with tens of
+thousands of academic workers striking over wages and working conditions
+and obtaining significant contract settlements. Together, these events
+substantially elevated the salience of wage comparisons within the UC
+system---even though salary data had technically been public for years.
+
+We examine whether this period corresponds with measurable changes in
+within-rank salary dispersion among UC faculty. Our analysis focuses on
+five faculty categories: Assistant, Associate, Full, Clinical, and
+Research professors. The main empirical tools are: (1) annual
+coefficients of variation (CV) computed separately for each rank; (2) a
+baseline log-linear OLS regression that estimates whether log wages
+deviated from the secular trend after 2022; (3) Levene's tests for
+equality of variance across the pre- and post-2022 periods; and (4) a
+difference-in-differences interaction model that tests whether wage
+gaps between ranks changed after 2022.
+
+The remainder of the paper proceeds as follows. Section~\ref{sec:theory}
+describes the theoretical framework. Section~\ref{sec:data} describes
+the data sources and preprocessing. Section~\ref{sec:methods} outlines
+the empirical methodology. Section~\ref{sec:results} presents the
+results. Section~\ref{sec:discussion} discusses findings and limitations.
+Section~\ref{sec:conclusion} concludes. Figures and supplementary tables
+appear in the Appendix.
+
+% ============================================================
+\section{Theoretical Framework}
+\label{sec:theory}
+
+We model the 2022 transparency and labor-action shock as an event that
+abruptly increased the salience of peer wage comparisons within the UC
+faculty labor market. The theoretical mechanism draws on two strands of
+the economics literature.
+
+The first strand concerns social preferences and inequality aversion.
+\citet{bandiera2005} and \citet{card2012} document that workers who
+learn they are paid less than comparable peers experience a significant
+reduction in job satisfaction and effort. Following the utility
+specification in \citet{bandiera2005}, an agent's utility can be
+written as:
+\begin{equation}
+  U_i = W_i - C(e_i) - \lambda\max(0,\; W_{\text{peer}} - W_i),
+  \label{eq:utility}
+\end{equation}
+where $W_i$ is the worker's wage, $C(e_i)$ is the cost of effort, and
+the final term captures the disutility---an ``envy cost''---from
+observing a higher-paid peer. The parameter $\lambda \geq 0$ indexes the
+salience of wage comparisons. When compensation is opaque, $\lambda
+\approx 0$. The 2022 transparency shock raises $\lambda$, shifting the
+agent's incentive-compatibility constraints and creating pressure for the
+principal (the UC system) to reduce within-group wage dispersion in order
+to prevent a decline in aggregate effort.
+
+The second strand concerns the equilibrium effects of wage transparency.
+\citet{cullen2022} show that transparency fundamentally alters bargaining
+dynamics by making individualized pay differences highly visible, and
+consequently costly for firms to sustain. In equilibrium, employers
+facing transparent wage structures rationally choose to reduce
+within-group dispersion to limit internal dissatisfaction. An important
+boundary condition in the Cullen--Pakzad-Hurson framework is that this
+compression is primarily an internal equity response: it operates within
+peer groups defined by comparable job classification, not across
+structurally different positions.
+
+Applied to the UC setting, this framework generates two predictions. For
+established faculty ranks (Full, Associate, Clinical, Research), where
+salaries are largely set through internal processes and promotion
+ladders, we expect the transparency shock to induce compression: the CV
+should fall and, potentially, rank-level wages should lie below their
+pre-trend trajectory. For entry-level Assistant professors, however,
+salaries are primarily determined by competitive external hiring, so the
+UC system has limited ability to compress wages without risking
+recruitment failure. We therefore predict little or no compression at
+the bottom of the hierarchy.
+
+% ============================================================
+\section{Data}
+\label{sec:data}
+
+\subsection{Sources}
+
+Our salary data come from two public administrative databases. Data for
+2012 are drawn from the UC Annual Wage Database maintained by the UC
+Office of the President (\url{https://ucannualwage.ucop.edu/wage/}).
+Data for 2013 through 2024 are drawn from the California State
+Controller's Government Compensation in California database
+(\url{https://publicpay.ca.gov/}). All data are publicly accessible and
+contain no individual identifiers.
+
+The merged panel covers 13 annual snapshots (2012--2024) and, after
+preprocessing, contains 229,386 professor-year observations with
+positive total wages, and 225,412 observations with positive regular pay.
+
+\subsection{Preprocessing and Sample Construction}
+
+Each annual file was loaded and standardized to five core columns: year,
+employer name, position title, regular pay, and total wages. We retained
+only records whose position title matched a ``professor'' pattern using
+a case-insensitive regular expression that captures titles containing
+``Prof'' followed by a space or hyphen, thereby including all professor
+variants while excluding ``Professional'' administrative staff.
+
+We then mapped free-text position titles into five faculty ranks using a
+priority-ordered keyword rule: a position is classified as
+\textit{Assistant} if the title contains ``assistant'' or ``asst'';
+\textit{Associate} if it contains ``associate'' or ``assoc'';
+\textit{Clinical} if it contains ``clinical'' or ``clin'';
+\textit{Research} if it contains ``research'' or ``res''; and
+\textit{Full} otherwise (including bare ``Professor'' titles). This
+within-rank classification is central to our identification strategy:
+comparing an entry-level Assistant Professor to a tenured Full Professor
+would confound structural position differences with salary inequality. By
+analyzing dispersion separately within each rank, we isolate
+within-peer-group variance.
+
+Before finalizing the panel, we removed duplicate rows, dropped records
+with negative or zero pay values, and verified that all five required
+columns were non-missing. The resulting analysis dataset is a
+\textit{repeated cross-section}: annual CSVs contain no individual
+identifiers, so we cannot track the same professor across years. Each
+observation is an independent salary record for whoever held a given
+position in a given year.
+
+\subsection{Descriptive Statistics}
+
+Table~\ref{tab:trends} summarizes the annual sample size and mean salary.
+The total number of professor observations grew from 16,017 in 2012 to a
+peak of 20,176 in 2023 before declining to 18,898 in 2024.
+Figure~\ref{fig:salary_trends} plots the level and distributional
+evolution of nominal total wages.
+
+\begin{table}[H]
+\centering
+\caption{Year-by-Year Professor Observations and Mean Total Wages, 2012--2024}
+\label{tab:trends}
+\begin{tabular}{lrrrrr}
+\toprule
+Year & N & Mean (\$) & Median (\$) & Std.\ Dev.\ (\$) & YoY\,\% \\
+\midrule
+2012 & 16,017 & 162,636 & 138,400 & 117,478 & --- \\
+2013 & 15,711 & 172,838 & 146,505 & 122,877 & +6.3\% \\
+2014 & 16,042 & 179,202 & 152,000 & 128,030 & +3.7\% \\
+2015 & 16,508 & 187,178 & 158,688 & 133,957 & +4.5\% \\
+2016 & 17,176 & 195,355 & 165,121 & 142,233 & +4.4\% \\
+2017 & 17,739 & 202,788 & 171,252 & 148,112 & +3.8\% \\
+2018 & 18,151 & 210,399 & 178,817 & 151,300 & +3.8\% \\
+2019 & 17,963 & 218,634 & 185,050 & 157,137 & +3.9\% \\
+2020 & 19,224 & 225,799 & 195,000 & 154,026 & +3.3\% \\
+2021 & 19,415 & 237,191 & 201,700 & 166,500 & +5.0\% \\
+2022 & 19,737 & 249,471 & 211,045 & 174,503 & +5.2\% \\
+2023 & 20,176 & 264,251 & 224,633 & 186,085 & +5.9\% \\
+2024 & 18,898 & 247,276 & 208,691 & 179,869 & $-6.4$\% \\
+\bottomrule
+\end{tabular}
+\begin{flushleft}
+\small Source: UC Annual Wage Database (2012) and California State
+Controller's Office (2013--2024). Sample restricted to professor
+positions with positive total wages.
+\end{flushleft}
+\end{table}
+
+Mean nominal wages grew steadily from \$162,636 in 2012 to a peak of
+\$264,251 in 2023---a cumulative increase of approximately 52\,\%, or
+roughly 4\,\% per year on average. Year-over-year growth was remarkably
+stable from 2014 through 2021, ranging from 3.3\,\% to 5.0\,\%
+annually, suggesting a consistent underlying wage-setting regime during
+the pre-period. The acceleration in 2022 (+5.2\,\%) and 2023 (+5.9\,\%)
+stands out modestly above that trend, as does the sharp reversal in 2024
+($-6.4$\,\%).
+
+Across ranks in 2024, Clinical faculty hold the highest mean compensation
+at approximately \$371,264 for the rank overall, reflecting the medical
+compensation structure at UC health science campuses. Full Professors
+earn a mean of \$261,329, Associate Professors \$233,613, and Assistant
+Professors \$183,209. Among campuses, UC San Francisco (\$298,740) and
+UC San Diego (\$292,983) report the highest mean total wages, while UC
+Riverside (\$167,993) and UC Merced (\$164,933) report the lowest.
+
+All analysis uses nominal wages. No inflation adjustment is applied;
+the analysis focuses on within-period distributional patterns rather
+than real purchasing power comparisons.
+
+% ============================================================
+\section{Empirical Strategy}
+\label{sec:methods}
+
+\subsection{Measuring Within-Rank Wage Dispersion}
+
+Our primary measure of wage compression is the coefficient of variation
+(CV), defined as the ratio of the standard deviation to the mean within
+a rank-year cell:
+\begin{equation}
+  \text{CV}_{r,t} = \frac{\sigma_{r,t}}{\mu_{r,t}} \times 100,
+\end{equation}
+where $r$ indexes rank and $t$ indexes year. The CV normalizes
+dispersion by the mean level, allowing meaningful comparison across
+periods with different average salary levels. Because nominal wages rose
+substantially over the sample period, a raw comparison of standard
+deviations would be uninformative; the CV controls for this scale effect.
+We also report the standard deviation and interquartile range (IQR) as
+supplementary measures.
+
+\subsection{Baseline OLS Regression}
+
+To estimate the conditional association between the post-2022 period and
+log wages, we estimate:
+\begin{equation}
+  \log(\text{TotalWages}_{i}) =
+    \beta_0 + \beta_1 \cdot \text{post2022}_{i}
+    + \mathbf{\beta}_2 \cdot \text{Rank}_i
+    + \mathbf{\beta}_3 \cdot \text{Campus}_i
+    + \beta_4 \cdot \text{Year}_i + \varepsilon_i,
+  \label{eq:baseline}
+\end{equation}
+where $\text{post2022}$ is an indicator equal to 1 for observations from
+2022 onward and 0 otherwise. $\text{Rank}$ and $\text{Campus}$ enter as
+sets of dummy variables (fixed effects), with Assistant Professor and UC
+Berkeley as the respective reference categories. $\text{Year}$ is a
+continuous linear time trend that controls for secular growth in nominal
+wages. The coefficient $\beta_1$ captures whether log wages deviated
+from the underlying trend after 2022, conditional on rank and campus.
+Using a log transformation on the outcome allows coefficients to be
+interpreted as approximate percentage changes.
+
+Because the wage distribution is right-skewed and exhibits
+heteroskedasticity---variance among Full Professors is substantially
+wider than among Assistant Professors---we use heteroskedasticity-robust
+(HC1) standard errors throughout. We verify that multicollinearity
+between the continuous $\text{Year}$ trend and the binary
+$\text{post2022}$ step function is not severe by computing Variance
+Inflation Factors (VIF).
+
+As a robustness check, we re-estimate Equation~\eqref{eq:baseline} with
+$\log(\text{RegularPay})$ as the dependent variable. Regular pay reflects
+only base compensation, excluding bonuses and other discretionary pay.
+Consistency across both outcomes confirms that findings are not an
+artifact of variation in bonus structures.
+
+We also run the same specification separately within each rank---the
+\textit{within-rank regressions}---which hold rank composition constant
+by construction and test whether the post-2022 level shift persists
+inside individual faculty categories.
+
+\subsection{Levene's Test for Variance Equality}
+
+We test whether the variance of salaries changed significantly between
+the pre-2022 period (2012--2021) and the post-2022 period (2022--2024)
+within each rank using Levene's test for equality of variances.
+Levene's test is robust to non-normal distributions, making it
+appropriate for wage data. The variance ratio (post-2022 variance divided
+by pre-2022 variance) indicates the direction of change: a ratio greater
+than 1 indicates that absolute variance \emph{increased} after 2022,
+while a ratio less than 1 indicates it decreased.
+
+\subsection{Difference-in-Differences Interaction Model}
+
+To test whether wage gaps \emph{between} ranks changed after 2022---the
+strongest form of the compression hypothesis---we estimate:
+\begin{equation}
+  \log(\text{TotalWages}_{i}) =
+    \gamma_0 + \gamma_1 \cdot \text{post2022}_{i}
+    \times \text{Rank}_i
+    + \mathbf{\gamma}_2 \cdot \text{Campus}_i
+    + \gamma_3 \cdot \text{Year}_i + \varepsilon_i.
+  \label{eq:did}
+\end{equation}
+The interaction terms $\text{post2022} \times \text{Rank}$ capture
+whether the post-2022 wage shift was differentially larger or smaller
+for a given rank relative to the reference category (Assistant
+Professor). A negative interaction for Full Professors would indicate
+that Full Professors experienced a larger proportional decline than
+Assistant Professors after 2022, consistent with compression from the
+top of the distribution.
+
+We note an important limitation of this design: our data are a repeated
+cross-section with no individual identifiers. The DiD model therefore
+captures changes in the \emph{distribution} of wages across groups, not
+individual wage trajectories. We cannot rule out unobserved compositional
+shifts within ranks---for example, if the mix of specializations or
+seniority levels within a rank changed after 2022.
+
+% ============================================================
+\section{Results}
+\label{sec:results}
+
+\subsection{Salary Trends}
+\label{subsec:trends}
+
+Figure~\ref{fig:salary_trends} displays the evolution of mean total
+wages, year-over-year growth, quartile salary trends, and total professor
+headcount from 2012 to 2024. Mean nominal wages grew steadily and
+monotonically from 2012 through 2023, with the 2024 observation
+representing the first nominal decline in the sample period ($-6.4$\,\%).
+The IQR widened over time, reflecting growing absolute dispersion, but
+the rate of widening decelerated after 2022 for most ranks. The
+professor headcount grew from roughly 16,000 in 2012 to just over 20,000
+in 2023, with a decline to approximately 18,900 in 2024.
+
+Figure~\ref{fig:headcount_by_rank} shows headcount by rank over time.
+The Full Professor category is the largest throughout the sample. The
+Clinical Professor category grew substantially, from roughly 1,400
+observations in 2012 to over 2,500 by 2024, reflecting expanded
+health-system activity across UC campuses.
+
+\subsection{Within-Rank Coefficient of Variation}
+\label{subsec:cv}
+
+Figure~\ref{fig:cv_table} and Figure~\ref{fig:cv_by_rank} report the CV for
+each rank and year. The average pre-2022 CV (2012--2021 mean) and
+post-2022 CV (2022--2024 mean) for each rank are as follows:
+
+\begin{table}[H]
+\centering
+\caption{CV Summary: Pre-2022 vs.\ Post-2022 Average}
+\label{tab:cv_summary}
+\begin{tabular}{lrrr}
+\toprule
+Rank & Avg CV Pre-2022 (\%) & Avg CV Post-2022 (\%) & Change (pp) \\
+\midrule
+Assistant  & 74.14 & 75.87 & $+2.35$ \\
+Associate  & 76.83 & 72.17 & $-4.66$ \\
+Full       & 58.91 & 56.80 & $-3.58$ \\
+Clinical   & 65.29 & 64.43 & $-1.32$ \\
+Research   & 67.83 & 65.70 & $-3.14$ \\
+\bottomrule
+\end{tabular}
+\begin{flushleft}
+\small Pre-2022 = average CV across 2012--2021; Post-2022 = average CV
+across 2022--2024. CV computed as $100 \times \sigma / \mu$ within each
+rank-year cell. Source: notebook cell 25.
+\end{flushleft}
+\end{table}
+
+Four of the five ranks show a decline in relative wage dispersion after
+2022. The largest drop occurs among Associate Professors
+($-4.66$ percentage points), followed by Full Professors ($-3.58$\,pp)
+and Research Professors ($-3.14$\,pp). Clinical Professors exhibit a
+modest decline of $-1.32$\,pp. Assistant Professors are the notable
+exception: their CV increased by $+2.35$\,pp, indicating that relative
+wage dispersion among entry-level faculty \emph{widened} after 2022.
+
+The CV trends for Full and Associate Professors show a broadly
+monotonic decline from 2012 onward that predates the 2022 threshold,
+suggesting that within-rank convergence was a gradual ongoing process
+rather than a discrete policy response. The 2022 threshold does not
+appear to coincide with a sudden break for most ranks. The Assistant
+Professor CV, in contrast, declined through 2020 before reversing
+upward in 2022--2024.
+
+\subsection{Levene's Test for Variance Equality}
+\label{subsec:levene}
+
+Figure~\ref{fig:levene} reports Levene's test
+results. Across all five ranks, the null hypothesis of equal variances
+is rejected at $p < 0.001$, indicating that the variance of salaries
+changed significantly between the pre- and post-2022 periods. However,
+the variance \emph{ratios} range from 1.32 (Full) to 1.59 (Assistant),
+all greater than 1, indicating that absolute salary variance
+\emph{increased} post-2022 across every rank.
+
+This result appears to contradict the CV compression finding but is
+fully reconcilable. Mean salaries rose substantially during the
+post-2022 period, driven by inflation, secular wage growth, and the
+consequences of the 2022 labor action. Because mean salaries grew faster
+than the absolute spread of the distribution for most ranks, relative
+dispersion (as measured by the CV) fell even as the dollar-denominated
+spread widened. The appropriate measure for assessing the compression
+hypothesis is therefore the CV, not the raw variance: workers experience
+inequality in proportional terms relative to their peers' wages, not in
+absolute dollar differences.
+
+\subsection{Baseline OLS Results}
+\label{subsec:baseline}
+
+Figure~\ref{fig:table_tw} presents the
+baseline OLS results for $\log(\text{TotalWages})$. The post-2022
+coefficient is $-0.0634$ (SE $= 0.0063$, $p < 0.001$), indicating that
+log total wages were approximately 6.3\,\% below the level predicted by
+the secular trend after 2022, conditional on rank and campus. All rank
+fixed effects are positive and strongly significant relative to the
+Assistant Professor baseline, confirming a clear compensation hierarchy:
+Clinical $>$ Full $>$ Research $>$ Associate $>$ Assistant. The linear
+time trend coefficient of $0.0475$ implies annual nominal wage growth of
+roughly 4.9\,\% per year along the pre-trend.
+
+Figure~\ref{fig:table_rp} presents the
+robustness check using $\log(\text{RegularPay})$ as the dependent
+variable. The post-2022 coefficient is $-0.0410$ (SE $= 0.0043$,
+$p < 0.001$). The smaller magnitude relative to the total-wages result
+suggests that some of the post-2022 decline in total wages reflects
+reduced variable pay (bonuses, overload pay), but the direction and
+significance of the finding are unchanged. Both models use the
+deduplicated panel of 229,386 and 225,412 observations respectively.
+
+\subsection{Multicollinearity Check}
+\label{subsec:vif}
+
+Figure~\ref{fig:vif} reports the Variance Inflation Factors (VIF) for
+the baseline regression predictors. The VIF for $\text{Year}$ is 2.197
+and for $\text{post2022}$ is 2.193, both well below the commonly used
+concern threshold of 5 and far below the severe threshold of 10.
+The VIF for rank and campus are approximately 1.0. Multicollinearity
+is not a concern in the baseline specification.
+
+\subsection{Difference-in-Differences Interaction Results}
+\label{subsec:did}
+
+Figure~\ref{fig:table_did} presents the
+interaction regression results. The baseline $\text{post2022}$ term
+is $-0.0813$ (SE $= 0.0103$, $p < 0.001$), reflecting the post-period
+wage decline for Assistant Professors (the reference group).
+
+The interaction term for Full Professors is $-0.0016$ ($p = 0.888$),
+which is economically negligible and statistically indistinguishable
+from zero. This means Full Professors experienced essentially the same
+post-2022 wage shift as Assistant Professors, providing no evidence of
+between-rank compression from the top.
+
+Associate Professors show a statistically significant positive
+interaction ($\text{coef} = +0.0476$, $p = 0.0002$), indicating they
+fared \emph{better} relative to Assistant Professors after 2022. This
+is broadly consistent with the strong CV compression observed among
+Associates: their wages held up better than those of either Assistant or
+Full Professors in the post-period. Clinical Professors also show a
+positive interaction ($\text{coef} = +0.0548$, $p = 0.002$), reflecting
+continued compensation growth in health-system faculty markets. The
+Research Professor interaction is positive but statistically
+insignificant ($\text{coef} = +0.0301$, $p = 0.253$).
+
+Taken together, the DiD evidence does not support the hypothesis that
+the UC systematically narrowed the wage gap between senior and junior
+faculty after 2022 through targeted compression at the top.
+
+\subsection{Within-Rank Regressions}
+\label{subsec:withinrank}
+
+Figures~\ref{fig:wr_assistant}--\ref{fig:wr_research} report the
+within-rank baseline regressions, which hold rank composition constant
+and directly test whether post-2022 wages deviated from the within-rank
+secular trend. Results are summarized in Table~\ref{tab:within_rank}.
+
+\begin{table}[H]
+\centering
+\caption{Within-Rank Post-2022 Coefficient Summary}
+\label{tab:within_rank}
+\begin{tabular}{lrrrrl}
+\toprule
+Rank & Coef. & Std.\ Err. & $t$ & $p$-value & Approx.\ Effect \\
+\midrule
+Assistant  & $-0.0954$ & 0.0132 & $-7.23$ & $<0.001$ & $-9.1\%$ \\
+Associate  & $-0.0452$ & 0.0130 & $-3.47$ & $0.001$  & $-4.4\%$ \\
+Full       & $-0.0728$ & 0.0086 & $-8.49$ & $<0.001$ & $-7.0\%$ \\
+Clinical   & $-0.0272$ & 0.0235 & $-1.16$ & $0.247$  & $-2.7\%$ (n.s.) \\
+Research   & $+0.0092$ & 0.0375 & $+0.25$ & $0.805$  & $+0.9\%$ (n.s.) \\
+\bottomrule
+\end{tabular}
+\begin{flushleft}
+\small Specification: $\log(\text{TotalWages}) \sim
+\text{post2022} + C(\text{EmployerName}) + \text{Year}$, HC1 robust
+SE. Approximate percentage effect computed as $(\exp(\text{coef})-1)
+\times 100$.
+\end{flushleft}
+\end{table}
+
+The within-rank results reveal an important pattern: the post-2022
+wage shortfall relative to trend is largest for Assistant Professors
+($-9.1\%$, $p < 0.001$) and Full Professors ($-7.0\%$, $p < 0.001$),
+while it is smaller and insignificant for Clinical and Research
+professors. Associate Professors show a moderate, significant decline of
+$-4.4\%$. The fact that Assistant Professors show the largest
+within-rank decline in absolute magnitude, despite their CV rising,
+reflects that the \emph{level} of their wages fell relative to trend
+while the \emph{spread} of their distribution widened---consistent with
+the external market setting floor wages that vary widely across
+disciplines.
+
+\subsection{Pre-versus Post-2022 Salary Distributions}
+\label{subsec:distributions}
+
+Figure~\ref{fig:pre_post_dist} displays overlapping salary histograms for
+each rank, comparing the pre-2022 pooled distribution to the post-2022
+pooled distribution. For Full and Associate Professors, the post-2022
+distribution shifts rightward, reflecting higher mean wages, while the
+relative spread of the distribution narrows modestly. For Assistant
+Professors, the rightward shift is present but the tails of the
+distribution widen proportionally, consistent with the CV increase for
+that rank. Clinical Professors show a broad rightward shift with a
+pronounced right tail.
+
+% ============================================================
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Interpreting the Main Findings}
+
+The results present a nuanced picture of how the UC faculty labor market
+responded to the 2022 transparency and labor-action shock. Two findings
+stand out.
+
+First, there is clear evidence of \emph{within-rank} relative wage
+compression among established faculty. The CVs for Full, Associate,
+Research, and Clinical professors all declined after 2022, with Associate
+professors exhibiting the strongest signal ($-4.66$\,pp). This pattern
+is consistent with the theoretical prediction in \citet{cullen2022}: when
+wage comparisons become more salient, employers face pressure to narrow
+within-group pay gaps to limit dissatisfaction among employees who
+directly compare their compensation with same-rank peers.
+
+Second, there is no evidence of \emph{between-rank} compression. The DiD
+interaction for Full versus Assistant Professors is economically small
+and statistically indistinguishable from zero. This is theoretically
+coherent: inequality aversion operates among direct peers, not across
+structurally distinct positions. An Assistant Professor has no basis for
+comparing their salary to a Full Professor's, given the evident
+differences in seniority, tenure, and accumulated human capital. The
+utility specification in Equation~\eqref{eq:utility} implies that
+$\lambda$ is activated by comparisons within a relevant reference group,
+not across all employees.
+
+The exception among ranks---Assistant Professors---highlights an
+important boundary condition on transparency-driven compression. Entry
+salaries are set through a competitive national academic job market with
+substantial cross-disciplinary variation, and the UC cannot compress
+entry wages without risking recruitment failures in high-demand fields.
+The $+2.35$\,pp increase in the Assistant Professor CV is consistent
+with growing salary heterogeneity in external markets for new faculty.
+
+\subsection{Reconciling CV and Levene Results}
+
+Levene's tests show that absolute salary variance increased significantly
+after 2022 across all ranks, which superficially contradicts the
+CV-based compression finding. The reconciliation is straightforward.
+Mean salaries rose substantially during the post-2022 period, driven by
+inflation, secular wage growth, and the historic 2022 academic strikes.
+Because the mean grew faster than the standard deviation for senior
+ranks, the CV declined even as the dollar-denominated spread of the
+distribution widened. This illustrates why the CV is the appropriate
+dispersion metric for the compression hypothesis: workers experience
+inequality in proportional terms relative to their peers' compensation
+levels, not as an absolute dollar gap.
+
+\subsection{Clinical Professors}
+
+The positive and significant DiD interaction for Clinical Professors
+($\text{coef} = +0.0548$, $p = 0.002$) indicates they fared better than
+Assistant Professors in the post-2022 period. This likely reflects
+continued growth in health-system compensation at UC's medical campuses,
+driven by broader dynamics in the physician and academic medicine labor
+market. Clinical faculty operate under different compensation structures
+than academic-track faculty, limiting the degree to which internal UC
+equity norms constrain their pay.
+
+\subsection{The 2024 Decline}
+
+The $-6.4\%$ year-over-year decline in mean total wages in 2024 is the
+most pronounced single-year change in the sample. At the same time, total
+observations fell from 20,176 in 2023 to 18,898 in 2024, a decline of
+approximately 6.3\%. Because our data are a repeated cross-section, we
+cannot determine the extent to which the mean wage decline reflects
+actual pay cuts versus compositional turnover---specifically, whether
+higher-paid senior faculty exited the UC system while lower-paid new
+hires entered. The 2024 pattern warrants cautious interpretation.
+
+\subsection{Limitations}
+
+\paragraph{Repeated cross-section.} The fundamental limitation of this
+study is the absence of individual identifiers. We cannot track any
+professor across years, so we cannot measure individual wage growth,
+distinguish pay cuts from turnover, or control for unobserved
+compositional shifts within ranks. It is possible that apparent
+within-rank compression among Full Professors reflects adverse selection:
+if the UC compressed wages by capping high earners, and those
+individuals subsequently departed for private universities, the observed
+compression in the remaining sample would reflect attrition rather than
+deliberate wage-setting policy.
+
+\paragraph{Identification.} Our design compares the post-2022 period to
+the pre-2022 secular trend. We cannot claim that any observed change
+\emph{caused} by the transparency mandate or the strikes, as multiple
+forces changed simultaneously in 2022--2023. The post-2022 indicator
+absorbs any event occurring at that threshold. We therefore frame our
+findings as descriptive associations rather than causal estimates.
+
+\paragraph{Nominal wages only.} All analysis uses nominal wages. Without
+verified inflation data, we do not convert to real wages. Over a 13-year
+period spanning significant inflation, the nominal trend likely
+overstates real wage growth. However, our main finding concerns
+\emph{relative} within-rank dispersion (the CV), which is unaffected by
+common inflation because it divides the standard deviation by the mean.
+
+% ============================================================
+\section{Conclusion}
+\label{sec:conclusion}
+
+This paper examined within-rank salary dispersion among University of
+California faculty using 13 years of administrative compensation data
+spanning 2012--2024. Our analysis focused on whether the period
+surrounding the 2022 California Pay Transparency Act and the historic UC
+academic labor strikes corresponds with measurable changes in the
+distribution of wages within faculty ranks.
+
+Our main findings are as follows. Mean nominal faculty wages grew by
+approximately 52\,\% over the sample period before declining 6.4\,\% in
+2024. The coefficient of variation declined after 2022 for Full
+($-3.6$\,pp), Associate ($-4.7$\,pp), Research ($-3.1$\,pp), and
+Clinical ($-1.3$\,pp) professors, indicating a narrowing of relative pay
+disparities within these ranks. Assistant Professor CV increased by
+$+2.4$\,pp, consistent with external labor-market pressures that prevent
+internal compression at the hiring margin. The baseline OLS regression
+finds that log wages were approximately 6.3\,\% below the secular trend
+after 2022, conditional on rank and campus. The DiD interaction model
+finds no evidence that wage gaps between Full and Assistant Professors
+narrowed, but Associate and Clinical professors fared relatively better
+in the post-period. Levene's tests confirm that absolute variance
+increased across all ranks, but this is consistent with CV compression
+because mean salaries grew faster than the spread for senior ranks.
+
+These findings suggest that wage transparency and labor actions can
+induce relative salary compression \emph{within} established peer groups
+but have a more limited impact \emph{across} structurally distinct
+positions. Internal equity pressures appear to operate primarily among
+direct peers who observe and compare their wages, while the
+compensation of entry-level faculty remains tethered to external market
+conditions. Future research with individual-level panel data would be
+needed to separate deliberate wage-setting compression from compositional
+turnover effects.
+
+% ============================================================
+\newpage
+\bibliographystyle{apalike}
+\begin{thebibliography}{99}
+
+\bibitem[Akerlof(1970)]{akerlof1970}
+Akerlof, G. A. (1970).
+\newblock The market for ``lemons'': Quality uncertainty and the market
+mechanism.
+\newblock \textit{The Quarterly Journal of Economics}, 84(3), 488--500.
+
+\bibitem[Bandiera et al.(2005)]{bandiera2005}
+Bandiera, O., Barankay, I., \& Rasul, I. (2005).
+\newblock Social preferences and the response to incentives: Evidence from
+personnel data.
+\newblock \textit{The Quarterly Journal of Economics}, 120(3), 917--962.
+
+\bibitem[Card et al.(2012)]{card2012}
+Card, D., Mas, A., Moretti, E., \& Saez, E. (2012).
+\newblock Inequality at work: The effect of peer salaries on job satisfaction.
+\newblock \textit{American Economic Review}, 102(6), 2981--3003.
+
+\bibitem[Cullen(2024)]{cullen2024}
+Cullen, Z. B. (2024).
+\newblock Is pay transparency good?
+\newblock \textit{Journal of Economic Perspectives}, 38(1), 153--180.
+
+\bibitem[Cullen \& Pakzad-Hurson(2022)]{cullen2022}
+Cullen, Z. B., \& Pakzad-Hurson, B. (2022).
+\newblock Equilibrium effects of pay transparency.
+\newblock \textit{Econometrica}, 91(3), 765--802.
+% TODO: Verify final publication details; the NBER Working Paper version
+% is No. 28903; the published version appeared in Econometrica (2023).
+
+\bibitem[University of California(2025)]{UC2025}
+University of California. (2025).
+\newblock \textit{UC Employee Headcount}.
+\newblock University of California Information Center.
+\newblock Retrieved from \url{https://www.universityofcalifornia.edu/infocenter}
+
+\end{thebibliography}
+
+% ============================================================
+\newpage
+\appendix
+
+\section*{Appendix A: Mathematical Model of Inequality Aversion}
+\addcontentsline{toc}{section}{Appendix A: Mathematical Model}
+\label{app:model}
+
+To formalize the theoretical mechanism, we employ the inequality aversion
+framework from \citet{bandiera2005}. The agent's utility function is:
+\begin{equation}
+  U_i = W_i - C(e_i) - \lambda\max(0,\; W_{\text{peer}} - W_i),
+  \label{eq:util_app}
+\end{equation}
+where $W_i$ is the worker's wage, $C(e_i)$ is the convex cost of effort
+$e_i$, and the final term captures the disutility from observing a
+higher-paid peer, scaled by the salience parameter $\lambda \geq 0$.
+
+Prior to 2022, UC salary data were publicly posted but received limited
+attention; we model this as $\lambda \approx 0$, so pay comparisons
+generated negligible disutility. The 2022 events---the Pay Transparency
+Act, the strikes, and intensified media coverage of faculty pay---shifted
+$\lambda > 0$ for a meaningful share of the workforce. Once $\lambda > 0$,
+the incentive-compatibility constraint for effort is tightened: the
+principal (the UC system) must either raise $W_i$ toward $W_{\text{peer}}$
+or reduce $W_{\text{peer}}$ toward $W_i$ to maintain effort levels. Both
+channels narrow the distribution. The result is that the optimal contract
+involves lower within-group wage variance, i.e., wage compression.
+
+The prediction is limited to comparisons within a relevant reference
+group. An Assistant Professor does not compare their wage to a Full
+Professor's because the rank difference is institutionally recognized and
+perceived as structurally justified. The model therefore predicts
+compression within ranks but not across ranks---consistent with our
+empirical findings.
+
+\vspace{1em}
+
+\section*{Appendix B: Figures}
+\addcontentsline{toc}{section}{Appendix B: Figures}
+\label{app:figures}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{figures/fig_salary_trends.png}
+  \caption{UC Professor Salary Trends, 2012--2024 (Nominal). Top left:
+  mean total wages with $\pm$1 standard deviation band. Top right:
+  year-over-year percentage change in mean salary; the 2024 bar
+  ($-6.4$\,\%) is the only negative value in the sample. Bottom left:
+  quartile salary trends (Q25, median, Q75). Bottom right: total
+  professor observation count by year. Vertical dashed line marks the
+  2022 threshold.}
+  \label{fig:salary_trends}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{figures/fig_cv_by_rank.png}
+  \caption{Salary Dispersion by Professor Rank, 2012--2024. Top left:
+  coefficient of variation (CV\%) by rank; lower values indicate less
+  relative dispersion. Top right: standard deviation of salary by rank.
+  Bottom left: interquartile range by rank. Bottom right: bar chart
+  summarizing the CV change in percentage points (post-2022 minus
+  pre-2022 average). Red bar indicates CV expansion (Assistant); green
+  bars indicate CV compression. Vertical dashed line marks the 2022
+  threshold.}
+  \label{fig:cv_by_rank}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{figures/fig_pre_post_distributions.png}
+  \caption{Salary Distribution by Rank: Pre-2022 vs.\ Post-2022 (Total
+  Wages, Nominal). Each panel overlays the pooled pre-2022 (blue) and
+  post-2022 (red) salary histograms for one rank. Vertical dashed lines
+  mark the mean for each period. For Full and Associate Professors, the
+  post-2022 distribution shifts rightward while the relative spread
+  narrows modestly. For Assistant Professors, the distribution widens
+  proportionally with the rightward shift.}
+  \label{fig:pre_post_dist}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{figures/fig_headcount_by_rank.png}
+  \caption{Professor Headcount by Rank, 2012--2024. Full Professors
+  (green) are consistently the largest group. Clinical Professors (red)
+  grew substantially from roughly 1,400 in 2012 to over 2,500 by 2024.
+  Assistant Professors (blue) grew through 2019--2020 before declining
+  in 2023--2024. Vertical dashed line marks the 2022 threshold.}
+  \label{fig:headcount_by_rank}
+\end{figure}
+
+\vspace{1em}
+
+\section*{Appendix C: Tables}
+\addcontentsline{toc}{section}{Appendix C: Tables}
+\label{app:tables}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/table_cv_by_rank_year.png}
+  \caption{Coefficient of Variation (CV\%) by Rank and Year, 2012--2024.
+  Computed as $100 \times \sigma / \mu$ within each rank-year cell on
+  the deduplicated panel. Sample restricted to professors with
+  TotalWages $> 0$.}
+  \label{fig:cv_table}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/table_baseline_total_wages.png}
+  \caption{Table 1: Baseline OLS regression of log(Total Wages) on
+  post2022, rank fixed effects, campus fixed effects, and a linear year
+  trend. $N = 229{,}386$. HC1 heteroskedasticity-robust standard errors.
+  Reference category: Assistant Professor.}
+  \label{fig:table_tw}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/table_baseline_regular_pay.png}
+  \caption{Table 2: Robustness check---baseline OLS regression of
+  log(Regular Pay) on post2022, rank fixed effects, campus fixed effects,
+  and a linear year trend. $N = 225{,}412$. HC1 robust standard errors.
+  Reference category: Assistant Professor.}
+  \label{fig:table_rp}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/table_did_compression.png}
+  \caption{Table 3: Difference-in-differences compression test. Dependent
+  variable: log(Total Wages). Specification includes post2022, the full
+  interaction post2022 $\times$ Rank, campus fixed effects, and a linear
+  year trend. $N = 229{,}386$. HC1 robust standard errors. Reference
+  category: Assistant Professor.}
+  \label{fig:table_did}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/table_levene_test.png}
+  \caption{Levene's Test for Variance Equality---Pre-2022 vs.\
+  Post-2022. Variance Ratio $> 1$ indicates that absolute variance
+  \emph{increased} post-2022. All five ranks show statistically
+  significant variance changes ($p < 0.001$). This result is consistent
+  with CV compression because mean salaries rose faster than the absolute
+  spread for senior ranks.}
+  \label{fig:levene}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/table_vif.png}
+  \caption{Variance Inflation Factors (VIF) for the baseline regression
+  predictors. All VIFs are well below the concern threshold of 5,
+  confirming that multicollinearity between the continuous Year trend and
+  the binary post2022 indicator is not severe.}
+  \label{fig:vif}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/table_within_rank_assistant.png}
+  \caption{Within-Rank Regression: Assistant Professors. Specification:
+  $\log(\text{TotalWages}) \sim \text{post2022} + C(\text{EmployerName})
+  + \text{Year}$. $N = 63{,}756$. HC1 robust standard errors.}
+  \label{fig:wr_assistant}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/table_within_rank_associate.png}
+  \caption{Within-Rank Regression: Associate Professors.
+  $N = 50{,}988$. Specification and standard errors as in
+  Figure~\ref{fig:wr_assistant}.}
+  \label{fig:wr_associate}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/table_within_rank_full.png}
+  \caption{Within-Rank Regression: Full Professors.
+  $N = 83{,}141$. Specification and standard errors as in
+  Figure~\ref{fig:wr_assistant}.}
+  \label{fig:wr_full}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/table_within_rank_clinical.png}
+  \caption{Within-Rank Regression: Clinical Professors.
+  $N = 23{,}918$. The post2022 coefficient is negative but not
+  statistically significant ($p = 0.247$), reflecting the distinct
+  dynamics of health-system compensation.}
+  \label{fig:wr_clinical}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/table_within_rank_research.png}
+  \caption{Within-Rank Regression: Research Professors.
+  $N = 7{,}583$. The post2022 coefficient is positive and not
+  statistically significant ($p = 0.805$), indicating no significant
+  deviation from trend within this smaller rank category.}
+  \label{fig:wr_research}
+\end{figure}
+
+\end{document}
